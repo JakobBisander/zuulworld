@@ -120,14 +120,11 @@ public class Game
     private void printHelp() 
     {
         System.out.println("You are lost and need to find a way off the island, and preferably soon.");
-        System.out.println("You are "+ currentRoom.getShortDescription());
+        
         System.out.println();
         System.out.println(currentPlayer.getLife());
-        
-        System.out.println(currentPlayer.damageRoll());
-        
         System.out.println("Your command words are:");
-      
+       System.out.println(currentRoom.getShortDescription());
         parser.showCommands();
     }
 
