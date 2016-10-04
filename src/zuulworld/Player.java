@@ -59,6 +59,7 @@ public class Player {
         int roll;
         // Rolls a random number between 0 and 40, then adds 80 to get a number between 80 and 120. 
         dmgRoll = (Double) (Math.random() * 41) + 80;
+        // Divides by 100 to get a factor between 0.80 and 1.20
         dmgRoll = (dmgRoll / 100) * attack;
 
         // Converts the double dmgRoll into an integer for easier display and calculations. Always rounds down. 
