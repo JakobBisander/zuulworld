@@ -9,6 +9,7 @@ public class Game {
     private final Parser parser;
     private Room currentRoom;
     private Player currentPlayer;
+    private Creature currentCreature;
 
     public Game() {
         createRooms();
@@ -20,6 +21,14 @@ public class Game {
         Player newPlayer;
         newPlayer = new Player(20, 10);
         currentPlayer = newPlayer;
+
+    }
+
+    private void spawnCreatures() {
+        Creature tiger, boss;
+
+        tiger = new Creature("tiger", 20, 5);
+        boss = new Creature("boss", 50, 15);
 
     }
 
@@ -131,8 +140,11 @@ public class Game {
         if (nextRoom == null) {
             System.out.println("You wander for a while in the direction, but suddenly find yourself back where you started.");
         } else {
+            
             currentRoom = nextRoom;
             System.out.println(currentRoom.getLongDescription());
+            
+            
 
         }
     }
@@ -144,6 +156,16 @@ public class Game {
                 return;
             }
             String target = command.getSecondWord();
+            System.out.println(target);
+
+            if (target.equals("tiger")) {
+                Creature tiger;
+                tiger = new Creature("tiger", 25, 5);
+                currentCreature = tiger;
+                System.out.println("Sasdasd");
+                System.out.println(currentCreature.getLife());
+            }
+
         } else {
             System.out.println("There is nothing to attack here.");
         }
