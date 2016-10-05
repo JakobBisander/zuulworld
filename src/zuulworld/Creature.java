@@ -9,12 +9,12 @@ package zuulworld;
  *
  * @author Jakob
  */
-public class Player {
+public class Creature {
 
     private int health;
     private int attack;
 
-    public Player(int health, int attack) {
+    public Creature(String name, int health, int attack) {
         this.health = health;
         this.attack = attack;
 
@@ -23,14 +23,14 @@ public class Player {
     /**
      * getLife Method
      *
-     * @return Returns the players current hitpoints.
+     * @return Returns an integer containing the creatures current hitpoints.
      */
     public String getLife() {
-        return ("Your current hitpoints is: " + health);
+        return ("The creatures hitpoints is: " + health);
     }
 
     /**
-     * Takes an integer variable and changes the players attack-rating by that
+     * Takes an integer variable and changes the creatures attack-rating by that
      * much.
      *
      * @param wep The amount to change the attack-rating with.
@@ -40,18 +40,20 @@ public class Player {
     }
 
     /**
-     * Makes changes to the players healthpool.
+     * Makes changes to the creatures healthpool.
      *
-     * @param damage The change in the players hitpoints.
+     * @param damage The integer value with which to change the creatures
+     * hitpoints.
      */
     public void takeHit(int damage) {
         health = health + damage;
     }
 
     /**
-     * Rolls an attack roll for the player, taking into account his attack
+     * Rolls an attack roll for the creature, taking into account it's attack
      * rating.
-     * @return Returns an integer between 80% and 120% of the players attack
+     *
+     * @return Returns an integer between 80% and 120% of the creatures attack
      * rating.
      */
     public int damageRoll() {
