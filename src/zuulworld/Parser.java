@@ -1,3 +1,5 @@
+//Parser (definition): to analyze (a string of characters) in order to associate groups of characters 
+//with the syntactic units of the underlying grammar.
 package zuulworld;
 
 import java.util.Scanner;
