@@ -4,7 +4,7 @@ package zuulworld;
 
 public enum CommandWord
 {
-    GO("go"), QUIT("quit"), HELP("help"), UNKNOWN("?"), ATTACK("attack");
+    GO("go"), QUIT("quit"), HELP("help"), UNKNOWN("?"), ATTACK("attack"), FLEE("flee");
     
     private final String commandString;
     
