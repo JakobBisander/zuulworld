@@ -83,6 +83,17 @@ public class Game {
         village.setExit("flee", beach);
 
         currentRoom = beach;
+
+        Creature tiger, boss, giant, crab, dummy;
+        tiger = new Creature("tiger", 25, 5);
+        boss = new Creature("boss", 100, 15);
+        giant = new Creature("giant", 70, 10);
+        crab = new Creature("crab", 15, 3);
+        dummy = new Creature("dummy", 5, 0);
+
+        river.setCreature(river, tiger);
+        crash.setCreature(crash, crab);
+
     }
 
     public void play() {
@@ -129,7 +140,12 @@ public class Game {
         if (commandWord == CommandWord.HELP) {
             printHelp();
         } else if (commandWord == CommandWord.ATTACK) {
-            startAttack(command);
+            if (currentPlayer.getStatus() == false) {
+                startAttack(command);
+            } else {
+                //ACTUAL ATTACk
+            }
+
         } else if (commandWord == CommandWord.GO) {
             goRoom(command);
         } else if (commandWord == CommandWord.FLEE) {
@@ -168,10 +184,10 @@ public class Game {
                 return;
             }
 
-            if ("flee".equals(command.getSecondWord())){
+            if ("flee".equals(command.getSecondWord())) {
                 System.out.println("You can't flee right now.");
                 return;
-                
+
             }
             String direction = command.getSecondWord();
 
@@ -186,27 +202,24 @@ public class Game {
 
             }
         } else {
-            System.out.println("You cant do that right now!");
+            System.out.println("You can't do that right now!");
         }
     }
 
     private void startAttack(Command command) {
-        if (currentRoom.getLocation() == "river") {
+        Creature nowCreature = currentRoom.getCreature(currentRoom);
+
+        currentCreature = nowCreature;
+        if (currentCreature != null) {            
             if (!command.hasSecondWord()) {
                 System.out.println("Attack what?");
                 return;
             }
             String target = command.getSecondWord();
-            System.out.println(target);
-
-            if (target.equals("tiger")) {
-                Creature tiger;
-                tiger = new Creature("tiger", 25, 5);
-                currentCreature = tiger;
-
-                System.out.println(currentCreature.getLife());
+            if (target.equals(currentCreature.getName())) {
                 currentPlayer.changeStatus();
-
+                System.out.println("You are now in combat with a " + currentCreature.getName() + ".");
+                System.out.println(currentCreature.getLife());
             }
 
         } else {

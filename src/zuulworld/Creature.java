@@ -11,15 +11,41 @@ package zuulworld;
  */
 public class Creature {
 
+    private String name;
     private int health;
-    private int attack;
+    private int attack;    
+    public boolean isAlive;
 
     public Creature(String name, int health, int attack) {
+        this.name = name;
         this.health = health;
         this.attack = attack;
+        this.isAlive = true;
 
     }
-
+    
+    /**
+     * Method for getting the name of a creature
+     * @return Returns a string with the name of the creature. 
+     */
+    public String getName(){
+        return name;
+    }
+    /**
+     * Changes the alive status of a creature to false (dead).
+     */
+    public void changeStatus(){
+        isAlive = false;
+    }
+    
+    /**
+     * Returns the status of the creature, where true is alive, and false is dead. 
+     * @return Returns a boolean where true is alive, and false is dead. 
+     */
+    public boolean getStatus(){
+        
+        return isAlive;
+    }
     /**
      * getLife Method
      *
