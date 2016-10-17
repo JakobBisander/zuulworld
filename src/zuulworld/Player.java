@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * This class holds information about player generated for the game. 
+ * The player is assigned a specific amount of hitpoints and a specific attack-rating. 
+ * The object keeps track of wether or not the player is in combat, and wether the player is alive or dead. 
  */
 package zuulworld;
 
@@ -14,10 +14,11 @@ public class Player {
     private int health;
     private int attack;
     private boolean inCombat;
+    private boolean isDead;
 
     /**
      * Initiates the player with a given health and attack-rating. Also sets the
-     * combat-status to false.
+     * combat-status, and dead status to false.
      *
      * @param health The starting hitpoints of the player.
      * @param attack The starting attack-rating of the player.
@@ -26,13 +27,14 @@ public class Player {
         this.health = health;
         this.attack = attack;
         this.inCombat = false;
-
+        this.isDead = false;
     }
 
     /**
-     * getLife Method
+     * A method for knowing the hitpoints of the player. This returns a string,
+     * and not an integer with the actual number.
      *
-     * @return Returns the players current hitpoints.
+     * @return Returns the players current hitpoints in a string of information
      */
     public String getLife() {
         return ("Your current hitpoints is: " + health);
@@ -71,7 +73,9 @@ public class Player {
     }
 
     /**
-     * Makes changes to the players healthpool.
+     * Makes changes to the players healthpool. Notice that to make the player
+     * take damage, the argument of this method should be negative, and positive
+     * to heal the player.
      *
      * @param damage The change in the players hitpoints.
      */
@@ -88,15 +92,34 @@ public class Player {
      */
     public int damageRoll() {
         Double dmgRoll;
-        int roll;
+        int roll = 0;
         // Rolls a random number between 0 and 40, then adds 80 to get a number between 80 and 120. 
         dmgRoll = (Double) (Math.random() * 41) + 80;
         // Divides by 100 to get a factor between 0.80 and 1.20
         dmgRoll = (dmgRoll / 100) * attack;
 
         // Converts the double dmgRoll into an integer for easier display and calculations. Always rounds down. 
-        roll = dmgRoll.intValue();
+        roll = roll - dmgRoll.intValue();
 
         return (roll);
+    }
+
+    /**
+     * Boolean check of the players life.
+     *
+     * @return Returns a boolean; FALSE = ALIVE :: TRUE = DEAD
+     */
+    public boolean getDead() {
+        return isDead;
+    }
+
+    /**
+     * Marks the player as dead if the players hitpoints is below 1.
+     */
+    public void checkPlayer() {
+        if (health < 1) {
+            isDead = true;
+
+        }
     }
 }

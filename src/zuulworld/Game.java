@@ -14,12 +14,14 @@ public class Game {
     private Room currentRoom;
     private Player currentPlayer;
     private Creature currentCreature;
+    private boolean firstCombat;
 
     public Game() {
 
         createRooms();
         newPlayer();
         parser = new Parser();
+        firstCombat = true;
     }
 
     private void newPlayer() {
@@ -29,13 +31,6 @@ public class Game {
 
     }
 
-//    private void spawnCreatures() {
-//        Creature tiger, boss;
-//
-//        tiger = new Creature("tiger", 20, 5);
-//        boss = new Creature("boss", 50, 15);
-//
-//    }
     private void createRooms() {
         Room beach, jungle, river, crash, desert, village, mountain, volcano, tunnel;
 
@@ -83,6 +78,17 @@ public class Game {
         village.setExit("flee", beach);
 
         currentRoom = beach;
+
+        Creature tiger, boss, giant, crab, dummy;
+        tiger = new Creature("tiger", 100, 5);
+        boss = new Creature("boss", 100, 15);
+        giant = new Creature("giant", 70, 10);
+        crab = new Creature("crab", 15, 3);
+        dummy = new Creature("dummy", 5, 0);
+
+        river.setCreature(river, tiger);
+        crash.setCreature(crash, crab);
+
     }
 
     public void play() {
@@ -91,23 +97,17 @@ public class Game {
         boolean finished = false;
         while (!finished) {
             Command command = parser.getCommand();
-            finished = processCommand(command);
+            if (currentPlayer.getDead() == true) {  // Checks if the player is dead
+                finished = true;
+            } else {
+                finished = processCommand(command);
+            }
+
         }
         System.out.println("Thank you for playing. Good bye.");
     }
 
     private void printWelcome() {
-//        System.out.println();
-//        String Title = "Welcome to the Isle of Zuul!";
-//        for(int i=0; i<Title.length(); i++){
-//            try {
-//                System.out.print(Title.charAt(i));
-//                //Thread.sleep(5030)
-//                TimeUnit.MILLISECONDS.sleep(250);
-//            } catch (InterruptedException ex) {
-//                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
 
         System.out.println("Welcome to the Isle of Zuul!");
         System.out.println("<<<<<<<<<<<<<< Game Explanation >>>>>>>>>>>>");
@@ -129,7 +129,12 @@ public class Game {
         if (commandWord == CommandWord.HELP) {
             printHelp();
         } else if (commandWord == CommandWord.ATTACK) {
-            startAttack(command);
+            if (currentPlayer.getStatus() == false) {
+                startAttack(command);
+            } else {
+                cAttack();
+            }
+
         } else if (commandWord == CommandWord.GO) {
             goRoom(command);
         } else if (commandWord == CommandWord.FLEE) {
@@ -140,38 +145,42 @@ public class Game {
         return wantToQuit;
     }
 
+    /**
+     * Prints some helpful information for the player. Is issued with the
+     * 'help'-command.
+     */
     private void printHelp() {
-        try {
-            System.out.println("You are lost and need to find a way off the island, and preferably soon.");
-            Thread.sleep(500);
+
+        if (currentPlayer.getStatus() == true) {   // Checks if the player is in combat.
+            System.out.println("You are currently in combat with a " + currentCreature.getName() + " .");
+            System.out.println("You can either hit the " + currentCreature.getName() + " again with the 'attack'-command, or flee using the 'flee'-command.");
+        } else {
+            System.out.println("You are lost and need to find a way off the island as fast as possible.");
+            System.out.println();
+
+            System.out.println(currentPlayer.getLife());
+            System.out.println("You are currently not in combat.");
 
             System.out.println("You are " + currentRoom.getShortDescription());
             System.out.println();
-            Thread.sleep(500);
-            System.out.println(currentPlayer.getLife());
+            System.out.println("Your command words are: 'help', 'go', 'attack' and 'quit'. ");
 
-            Thread.sleep(500);
-            currentPlayer.changeStatus();
-            System.out.println(currentPlayer.getStatus());
-            System.out.println("Your command words are:");
-
-            parser.showCommands();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+            //parser.showCommands();
         }
+
     }
 
     private void goRoom(Command command) {
-        if (currentPlayer.getStatus() == false) {
+        if (currentPlayer.getStatus() == false) {   // Checks if the player is in combat. 
             if (!command.hasSecondWord()) {
                 System.out.println("Go where?");
                 return;
             }
 
-            if ("flee".equals(command.getSecondWord())){
-                System.out.println("You can't flee right now.");
+            if ("flee".equals(command.getSecondWord())) {
+                System.out.println("You can't flee when not in combat.");
                 return;
-                
+
             }
             String direction = command.getSecondWord();
 
@@ -186,26 +195,46 @@ public class Game {
 
             }
         } else {
-            System.out.println("You cant do that right now!");
+            System.out.println("You can't do that right now!");     // If the player is in combat, the 'go' command cannot be used. 
         }
     }
 
+    /**
+     * Starts combat with a creature. Is called from the processCommand method,
+     * whenever the player uses the 'attack' command while not in combat
+     * already.
+     *
+     * @param command The command contains the attack command and a second word
+     * that should be the name of whatever creature is available to attack.
+     */
     private void startAttack(Command command) {
-        if (currentRoom.getLocation() == "river") {
+        Creature nowCreature = currentRoom.getCreature(currentRoom);
+
+        currentCreature = nowCreature;
+        if (currentCreature != null) {
             if (!command.hasSecondWord()) {
                 System.out.println("Attack what?");
                 return;
             }
             String target = command.getSecondWord();
-            System.out.println(target);
+            if (target.equals(currentCreature.getName())) {
 
-            if (target.equals("tiger")) {
-                Creature tiger;
-                tiger = new Creature("tiger", 25, 5);
-                currentCreature = tiger;
+                if (currentCreature.getStatus() == false) {     // Checks if the creature is already dead. 
+                    // Code regarding loot 
+                    System.out.println("The creature here is already dead, maybe you should try to search it instead");
+                } else if (firstCombat == true) {
+                    firstCombat = false;
+                    currentPlayer.changeStatus();
+                    System.out.println("You are now in combat with a " + currentCreature.getName() + ".");
+                    System.out.println("While in combat you cannot move to another nearby room, but you can use the flee command to escape combat. ");
+                    System.out.println("You only need to type in 'attack' while in combat, to hit your opponent.");
+                    System.out.println(currentCreature.getLife());
+                } else {
 
-                System.out.println(currentCreature.getLife());
-                currentPlayer.changeStatus();
+                    currentPlayer.changeStatus();
+                    System.out.println("You are now in combat with a " + currentCreature.getName() + ".");
+                    System.out.println(currentCreature.getLife());
+                }
 
             }
 
@@ -215,15 +244,49 @@ public class Game {
     }
 
     /**
+     * Is called from the processCommand method when a player enters the
+     * 'attack'-command while IN combat with a creature. Furthers combat by 1
+     * hit from both participants - the player hits first, and then if the
+     * creature is not dead, it hits back.
+     */
+    private void cAttack() {
+        int playerAttack;
+        int creatureAttack;
+
+        playerAttack = currentPlayer.damageRoll();
+        creatureAttack = currentCreature.damageRoll();
+
+        currentCreature.takeHit(playerAttack);
+        System.out.println("You hit the " + currentCreature.getName() + " for " + playerAttack + " damage.");
+        System.out.println(currentCreature.getLife());
+        currentCreature.changeStatus();
+
+        if (currentCreature.getStatus() == true) {      // Checks if the creature died from the attack.
+            currentPlayer.takeHit(creatureAttack);
+            System.out.println("The " + currentCreature.getName() + " hits you back for " + creatureAttack + " damage.");
+            System.out.println(currentPlayer.getLife());
+            currentPlayer.checkPlayer();         // Checks if the players hitpoints is under 0, and marks him/her as dead if so. 
+            if (currentPlayer.getDead() == true) {   // Checks if the player died from the attack. 
+                System.out.println("Oh no! You've died! The game is now over, and will exit the next time you enter any command.");
+
+            }
+        } else {
+            System.out.println("The " + currentCreature.getName() + " has died!");
+            currentPlayer.changeStatus();
+        }
+
+    }
+
+    /**
      * Removes the player from combat and puts him in the beach location.
      */
     private void fleeCombat() {
-        if (currentPlayer.getStatus() == true) {
+        if (currentPlayer.getStatus() == true) {    // Checks if the player is in combat.
             fleeRoom();
             currentPlayer.changeStatus();
 
         } else {
-            System.out.println("There is nothing to flee from. Coward..!");
+            System.out.println("There is nothing to flee from.... Coward!");
         }
     }
 

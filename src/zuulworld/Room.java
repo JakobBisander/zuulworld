@@ -11,19 +11,25 @@ public class Room
     private String description;
     private String location;
     private HashMap<String, Room> exits;
+    private HashMap<Room, Creature> creatures;
 
     public Room(String description, String location) 
     {
         this.location = location;
         this.description = description;
         exits = new HashMap<String, Room>();
+        creatures = new HashMap<Room, Creature>();
     }
 
     public void setExit(String direction, Room neighbor) 
     {
         exits.put(direction, neighbor);
     }
-
+    
+    public void setCreature(Room room, Creature creature){
+        creatures.put(room, creature);
+    }
+    
     public String getShortDescription()
     {
         return description;
@@ -56,6 +62,13 @@ public class Room
         return exits.get(direction);
     }
     
+    public Creature getCreature(Room room){
+        return creatures.get(room);
+    }
+    
+//    public Creature getCreature(String name){
+//        return creatures.get(name);
+//    }
   
 }
 
