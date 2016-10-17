@@ -14,12 +14,14 @@ public class Game {
     private Room currentRoom;
     private Player currentPlayer;
     private Creature currentCreature;
+    private boolean firstCombat;
 
     public Game() {
 
         createRooms();
         newPlayer();
         parser = new Parser();
+        firstCombat = true;
     }
 
     private void newPlayer() {
@@ -220,11 +222,17 @@ public class Game {
                 if (currentCreature.getStatus() == false) {     // Checks if the creature is already dead. 
                     // Code regarding loot 
                     System.out.println("The creature here is already dead, maybe you should try to search it instead");
-                } else {
+                } else if (firstCombat == true) {
+                    firstCombat = false;
                     currentPlayer.changeStatus();
                     System.out.println("You are now in combat with a " + currentCreature.getName() + ".");
                     System.out.println("While in combat you cannot move to another nearby room, but you can use the flee command to escape combat. ");
                     System.out.println("You only need to type in 'attack' while in combat, to hit your opponent.");
+                    System.out.println(currentCreature.getLife());
+                } else {
+
+                    currentPlayer.changeStatus();
+                    System.out.println("You are now in combat with a " + currentCreature.getName() + ".");
                     System.out.println(currentCreature.getLife());
                 }
 
