@@ -19,6 +19,7 @@ public class Game {
     public Game() {
 
         createRooms();
+        createItem();
         newPlayer();
         parser = new Parser();
         firstCombat = true;
@@ -30,19 +31,18 @@ public class Game {
         currentPlayer = newPlayer;
 
     }
-
+    private Room beach, jungle, river, crash, desert, village, mountain, volcano, tunnel;
     private void createRooms() {
-        Room beach, jungle, river, crash, desert, village, mountain, volcano, tunnel;
-
-        beach = new Room("at the beach where you first washed up", "beach");
-        jungle = new Room("in a dense part of the jungle", "jungle");
-        river = new Room("by a river in the midst of the jungle. A tiger is sleeping near the bank of the river.", "river");
-        crash = new Room("at the site where the plane crashed", "crash");
-        desert = new Room("in a desolate desert", "desert");
-        village = new Room("at the village of a local tribe", "village");
-        mountain = new Room("on the slope of a mountain", "mountain");
-        volcano = new Room("inside an volcano LotR-style", "volcano");
-        tunnel = new Room("inside a cave", "tunnel");
+        
+        beach = new Room("at the beach where you first washed up.", "", "beach");
+        jungle = new Room("in a dense part of the jungle.", " You see a sword laying on the ground.","jungle");
+        river = new Room("by a river in the midst of the jungle. A tiger is sleeping near the bank of the river.", " You see a bow laying neer the tiger next to a blody corpse.", "river");
+        crash = new Room("at the site where the plane crashed.", " By the crash you see a stick", "crash");
+        desert = new Room("in a desolate desert.", "", "desert");
+        village = new Room("at the village of a local tribe.", "","village");
+        mountain = new Room("on the slope of a mountain.", "", "mountain");
+        volcano = new Room("inside an volcano LotR-style.", "", "volcano");
+        tunnel = new Room("inside a cave.", " You see a old gun laying in the shadows.", "tunnel");
 
         beach.setExit("south", jungle);
         beach.setExit("west", crash);
@@ -134,11 +134,16 @@ public class Game {
             } else {
                 cAttack();
             }
-
         } else if (commandWord == CommandWord.GO) {
             goRoom(command);
         } else if (commandWord == CommandWord.FLEE) {
             fleeCombat();
+        } else if (commandWord == CommandWord.TAKE) {
+            takeItem(command);
+        } else if (commandWord == CommandWord.DROP) {
+            dropItem(command);
+        } else if (commandWord == CommandWord.STATS) {
+            showStats();
         } else if (commandWord == CommandWord.QUIT) {
             wantToQuit = quit(command);
         }
@@ -198,7 +203,68 @@ public class Game {
             System.out.println("You can't do that right now!");     // If the player is in combat, the 'go' command cannot be used. 
         }
     }
-
+    
+    /**
+     * 
+     */
+    private void createItem() {
+        Items sword = new Items("sword", true, 10, 1);
+        sword.setItemDes("A sword in good condition");
+        jungle.placeItem("sword", sword);
+        
+        Items bow = new Items("bow", true, 7, 1);
+        bow.setItemDes("A old bow");
+        river.placeItem("bow", bow);
+        
+        Items gun = new Items("gun", true, 100, 1);
+        gun.setItemDes("An old gun with a few bullets");
+        tunnel.placeItem("gun", gun);
+        
+        Items stick = new Items("stick", true, 2, 1);
+        stick.setItemDes("A wooden stick");
+        crash.placeItem("stick", stick);
+    }
+    /**
+     * 
+     * @param command 
+     */
+    private void takeItem(Command command) {
+        if (currentPlayer.getStatus() == false) {
+            if(!command.hasSecondWord()) {
+                System.out.println("Take what?");
+                return;
+            }
+            String item = command.getSecondWord();
+            
+            if(!currentRoom.hasItem(item)) {
+                System.out.println("That item doesn't exist here.");
+            } else {
+                currentPlayer.addItem(item, currentRoom.getItem(item));
+                currentRoom.removeItem(item);
+                showStats();
+            }
+        }
+        
+    }
+    /**
+     * 
+     * @param command 
+     */
+    private void dropItem(Command command) {
+        if (currentPlayer.getStatus() == false) {
+            if(!command.hasSecondWord()) {
+                System.out.println("Drop what?");
+                return;
+            }
+            String key = command.getSecondWord();
+            
+            if(!currentPlayer.hasItem(key)) {
+                System.out.println("You don't have that item!");
+            } else {
+                currentPlayer.dropItem(key);
+            }
+        }
+    }
     /**
      * Starts combat with a creature. Is called from the processCommand method,
      * whenever the player uses the 'attack' command while not in combat
@@ -301,7 +367,22 @@ public class Game {
         System.out.println("You run away from the creature, and dont stop until you reach the beach again.");
         System.out.println(currentRoom.getLongDescription());
     }
-
+    /**
+     * 
+     */
+    private void showStats() {
+           
+        System.out.println("\n");
+        System.out.println("---- STATS ----");
+        System.out.println("Health - " + currentPlayer.getHP());
+        System.out.println("Attack DMG - " + currentPlayer.getDMG());
+        System.out.println("");
+        System.out.println(" --Inventory-- ");
+        for(String s: currentPlayer.itemStats()) {
+            System.out.println(s);
+        }
+        System.out.println("\n");
+    }
     /**
      * Exits the game.
      *
