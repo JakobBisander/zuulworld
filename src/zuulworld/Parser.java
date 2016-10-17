@@ -10,14 +10,12 @@ public class Parser
     private final CommandWords commands;
     private final Scanner reader;
 
-    public Parser() 
-    {
+    public Parser() {
         commands = new CommandWords();
         reader = new Scanner(System.in);
     }
 
-    public Command getCommand() 
-    {
+    public Command getCommand() {
         String inputLine;
         String word1 = null;
         String word2 = null;
@@ -37,8 +35,7 @@ public class Parser
         return new Command(commands.getCommandWord(word1), word2);
     }
 
-    public void showCommands()
-    {
+    public void showCommands() {
         commands.showAll();
     }
 }

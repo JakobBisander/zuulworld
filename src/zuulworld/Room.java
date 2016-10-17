@@ -10,13 +10,20 @@ public class Room
 {
     private String description;
     private String location;
+    private String weaponDes;
     private HashMap<String, Room> exits;
+    private HashMap<String, Items> items;
+    
+   
 
-    public Room(String description, String location) 
+    public Room(String description, String wepDes, String location) 
     {
         this.location = location;
         this.description = description;
+        this.weaponDes = wepDes;
         exits = new HashMap<String, Room>();
+        items = new HashMap<String, Items>();
+        
     }
 
     public void setExit(String direction, Room neighbor) 
@@ -31,7 +38,11 @@ public class Room
 
     public String getLongDescription()
     {
-        return "You are " + description + ".\n" + getExitString();
+        String des = "You are " + description + ".\n" + getExitString();
+        if(!items.isEmpty()) {
+            des = "You are " + description + weaponDes + ".\n" + getExitString();
+        }
+        return des;
     }
 
     private String getExitString()
@@ -47,7 +58,8 @@ public class Room
     /**
     Returns the current location of the player for comparison in commands.    
     **/
-    public String getLocation(){
+    public String getLocation()
+    {
         return location;
     }
 
@@ -55,7 +67,21 @@ public class Room
     {
         return exits.get(direction);
     }
+    public void placeItem(String name, Items item) {
+        items.put(name, item);
+    }
+    public boolean hasItem(String a) 
+    {
+        return items.containsKey(a);
+    }
+    public Items getItem(String key) 
+    {
+        return items.get(key);
+    }
+    public void removeItem(String key) 
+    {
+        items.remove(key);
+    }
     
-  
 }
 

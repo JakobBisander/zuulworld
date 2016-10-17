@@ -5,6 +5,11 @@
  */
 package zuulworld;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 /**
  *
  * @author Jakob
@@ -14,6 +19,9 @@ public class Player {
     private int health;
     private int attack;
     private boolean inCombat;
+    private final int carryCapacity;
+    private int carryCurrent;
+    private HashMap<String, Items> items;
 
     /**
      * Initiates the player with a given health and attack-rating. Also sets the
@@ -26,6 +34,10 @@ public class Player {
         this.health = health;
         this.attack = attack;
         this.inCombat = false;
+        this.carryCapacity = 2;
+        this.carryCurrent = 0;
+        items = new HashMap<String, Items>();
+       
 
     }
 
@@ -45,7 +57,6 @@ public class Player {
      * combat.
      */
     public Boolean getStatus() {
-
         return inCombat;
     }
 
@@ -53,9 +64,11 @@ public class Player {
      * Changes the combat-status of the player.
      */
     public void changeStatus() {
-        if (inCombat == true) {
+        if (inCombat == true) 
+        {
             inCombat = false;
-        } else if (inCombat == false) {
+        } else if (inCombat == false) 
+        {
             inCombat = true;
         }
     }
@@ -98,5 +111,49 @@ public class Player {
         roll = dmgRoll.intValue();
 
         return (roll);
+    }
+   
+    public void addItem(String name, Items item) {
+        if(carryCurrent < carryCapacity){
+            items.put(name, item);
+            System.out.println("You now have a " + name + "!");
+            this.attack = this.attack + items.get(name).getDMG();
+            carryCurrent++;
+            
+        } else {
+            System.out.println("Your inventory is full");
+        }
+    }
+    
+    public void dropItem(String key) {
+        if(items.containsKey(key)){
+        this.attack = this.attack - items.get(key).getDMG();
+        items.remove(key);
+            System.out.println("You have now droped your sword!");
+        carryCurrent--;
+        } else {
+            System.out.println("You don't have that item!");
+        }
+    }
+    public boolean hasItem(String key) {
+        return items.containsKey(key);
+    }
+    
+    public int getHP() {
+        return health;
+    }
+    
+    public int getDMG() {
+        return attack;
+    }
+    
+    public ArrayList<String> itemStats() {
+        ArrayList<String> nameDmg = new ArrayList();
+        for(Items i: items.values())
+        {
+            nameDmg.add(i.getName() + " - dmg: " + i.getDMG());
+        }
+        
+        return nameDmg;
     }
 }
