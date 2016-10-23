@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package zuulworld;
+import java.util.*;
 
 /**
  *
@@ -12,7 +13,8 @@ package zuulworld;
 public class NPC {
     
     String welcomeMessage;
-    String answers[][];
+    String answer[] = new String[3];
+    String question[] = new String[3];
     
     
     
@@ -34,7 +36,7 @@ public class NPC {
 //    
 //    public String firstResponseOne(int i) {
 //        if(i==1) {
-//            return firstAnswerOne;
+//            return firstAnswerOne; 
 //        }
 //        else if(i==2) {
 //            return firstAnswerTwo;
@@ -46,22 +48,52 @@ public class NPC {
 //            return noRealAnswer;
 //        }
     
-    
-    public String switchAnswers(int answer) {
-        switch(answer){
-            case 1: return answers[0][0];
-            break;
-            case 2: return answers[0][1];
-            break;
-            case 3: return answers[0][2];
-            break;
-            default: return "No answer found, please input a value between 1-3";
-                   
-        }
+    public void setQuestions(String set1, String set2, String set3) {
+        set1 = question[0];
+        set2 = question[1];
+        set3 = question[2];
     }
-
-    public void setAnswers() {
+    
+    public void setAnswers (String set1, String set2, String set3) {
+        set1 = answer[0];
+        set2 = answer[1];
+        set3 = answer[2];
+    }
+    
+    public String switchAnswers(int numberInput) {
         
+//        String chosenAnswer;
+        System.out.println("Please choose one of the following three answers:");
+        System.out.println("1: " + question[0]);
+        System.out.println("2: " + question[1]);
+        System.out.println("3: " + question[2]);
+
+//        switch(answer){
+//            case 1: chosenAnswer = answers[0];
+//            break;
+//            case 2: chosenAnswer = answers[1];
+//            break;
+//            case 3: chosenAnswer = answers[2];
+//            break;
+//            default: chosenAnswer = "No answer found, please input a value between 1-3";
+            
+                        if (numberInput!=4) {
+            switch (numberInput) {
+                case 1:
+                    return answer[0];
+                case 2:
+                    return answer[2];
+                case 3:
+                    return answer[3];
+                default:
+                    break;
+            }
+        }
+                         else {
+                    return "Goodbye";
+                        }
+                        return "That is not an answer!";
+//        return chosenAnswer;
     }
     
     

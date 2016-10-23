@@ -112,6 +112,9 @@ public class Game {
         } else if (commandWord == CommandWord.QUIT) {
             wantToQuit = quit(command);
         }
+        else if (commandWord == CommandWord.TALK) {
+            startConversation(command);
+        }
         return wantToQuit;
     }
 
@@ -168,6 +171,28 @@ public class Game {
 
         } else {
             System.out.println("There is nothing to attack here.");
+        }
+    }
+    
+    private void startConversation(Command command) {
+        if ("beach".equals(currentRoom.getLocation())) {
+            if(!command.hasSecondWord()) {
+                System.out.println("Talk to what?");
+                return;
+            }
+        
+        String target = command.getSecondWord();
+        
+        if(target.equals("mysterious")) {
+            NPC mysterious;
+            
+            mysterious = new NPC("mysterious man", "Hello");
+            System.out.println(mysterious.welcomeMessage);
+            mysterious.setQuestions("Where am I?", "Who are you?", "Can you please help me get off this island?");
+            mysterious.setAnswers("I am god!", "You are on The Island of Zuul!", "You must help yourself get off this island. The village in the east will be able to help you!");
+            
+            mysterious.switchAnswers(2);
+        }    
         }
     }
 
