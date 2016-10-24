@@ -1,5 +1,7 @@
 package zuulworld;
 
+import java.util.Scanner;
+
 /**
  *
  *
@@ -116,6 +118,10 @@ public class Game {
         else if (commandWord == CommandWord.TALK) {
             startConversation(command);
         }
+        else if (commandWord == CommandWord.REPLY) {
+            
+        }
+            
         return wantToQuit;
     }
 
@@ -176,6 +182,8 @@ public class Game {
     }
     
     private void startConversation(Command command) {
+        Scanner sc = new Scanner(System.in);
+        int i;
         if ("beach".equals(currentRoom.getLocation())) {
             if(!command.hasSecondWord()) {
                 System.out.println("Talk to what?");
@@ -186,17 +194,20 @@ public class Game {
         
         if(target.equals("mysterious")) {
             NPC mysterious;
+
             
             mysterious = new NPC("mysterious man", "Hello");
             currentNPC = mysterious;
             currentNPC.setWelcomeMessage("Hello!");
             System.out.println(currentNPC.getWelcomeMessage());
-            currentNPC.setQuestions("Where am I?", "Who are you?", "Can you please help me get off this island?");
+            currentNPC.setQuestions("Who are you?", "Where am I?", "Can you please help me get off this island?");
             currentNPC.setAnswers("I am god!", "You are on The Island of Zuul!", "You must help yourself get off this island. The village in the east will be able to help you!");
             
-            currentNPC.switchAnswers(2);
-        }    
+            i = sc.nextInt();
+            System.out.println(currentNPC.switchAnswers(i));   
         }
+        
+    }
     }
 
     private boolean quit(Command command) {

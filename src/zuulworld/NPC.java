@@ -12,9 +12,15 @@ import java.util.*;
  */
 public class NPC {
     
+    // Rewrite to an interface!!
+    // Maybe hashmap?
+    // https://docs.oracle.com/javase/tutorial/java/concepts/interface.html
+
+    
     String welcomeMessage;
     String answer[] = new String[3];
     String question[] = new String[3];
+    Scanner sc = new Scanner(System.in);
     
     
     
@@ -23,7 +29,7 @@ public class NPC {
     }
     
     public void setWelcomeMessage(String set){
-        set = welcomeMessage;
+        welcomeMessage = set;
     }
     
     public String getWelcomeMessage() {
@@ -47,17 +53,22 @@ public class NPC {
 //        else {
 //            return noRealAnswer;
 //        }
-    
+    /**
+     * 
+     * @param set1
+     * @param set2
+     * @param set3 
+     */
     public void setQuestions(String set1, String set2, String set3) {
-        set1 = question[0];
-        set2 = question[1];
-        set3 = question[2];
+        question[0] = set1;
+        question[1] = set2; 
+        question[2] = set3;
     }
     
     public void setAnswers (String set1, String set2, String set3) {
-        set1 = answer[0];
-        set2 = answer[1];
-        set3 = answer[2];
+        answer[0]= set1;
+        answer[1]= set2;
+        answer[2] = set3;
     }
     
     public String switchAnswers(int numberInput) {
@@ -67,6 +78,7 @@ public class NPC {
         System.out.println("1: " + question[0]);
         System.out.println("2: " + question[1]);
         System.out.println("3: " + question[2]);
+        System.out.println();
 
 //        switch(answer){
 //            case 1: chosenAnswer = answers[0];
@@ -76,23 +88,25 @@ public class NPC {
 //            case 3: chosenAnswer = answers[2];
 //            break;
 //            default: chosenAnswer = "No answer found, please input a value between 1-3";
-            
-                        if (numberInput!=4) {
+           
+                        do {
             switch (numberInput) {
                 case 1:
                     return answer[0];
                 case 2:
-                    return answer[2];
+                    return answer[1];
                 case 3:
-                    return answer[3];
-                default:
+                    return answer[2];
+                case 4:
                     break;
             }
-        }
-                         else {
-                    return "Goodbye";
                         }
-                        return "That is not an answer!";
+            while(numberInput!=4);
+        
+                        return "Goodbye";
+                        
+                        
+                        }
 //        return chosenAnswer;
     }
     
