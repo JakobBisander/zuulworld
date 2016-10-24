@@ -10,6 +10,7 @@ public class Game {
     private Room currentRoom;
     private Player currentPlayer;
     private Creature currentCreature;
+    private NPC currentNPC;
 
     public Game() {
         createRooms();
@@ -187,12 +188,13 @@ public class Game {
             NPC mysterious;
             
             mysterious = new NPC("mysterious man", "Hello");
-            mysterious.setWelcomeMessage("Hello!");
-            System.out.println(mysterious.getWelcomeMessage());
-            mysterious.setQuestions("Where am I?", "Who are you?", "Can you please help me get off this island?");
-            mysterious.setAnswers("I am god!", "You are on The Island of Zuul!", "You must help yourself get off this island. The village in the east will be able to help you!");
+            currentNPC = mysterious;
+            currentNPC.setWelcomeMessage("Hello!");
+            System.out.println(currentNPC.getWelcomeMessage());
+            currentNPC.setQuestions("Where am I?", "Who are you?", "Can you please help me get off this island?");
+            currentNPC.setAnswers("I am god!", "You are on The Island of Zuul!", "You must help yourself get off this island. The village in the east will be able to help you!");
             
-            mysterious.switchAnswers(2);
+            currentNPC.switchAnswers(2);
         }    
         }
     }
