@@ -187,7 +187,8 @@ public class Game {
             NPC mysterious;
             
             mysterious = new NPC("mysterious man", "Hello");
-            System.out.println(mysterious.welcomeMessage);
+            mysterious.setWelcomeMessage("Hello!");
+            System.out.println(mysterious.getWelcomeMessage());
             mysterious.setQuestions("Where am I?", "Who are you?", "Can you please help me get off this island?");
             mysterious.setAnswers("I am god!", "You are on The Island of Zuul!", "You must help yourself get off this island. The village in the east will be able to help you!");
             
