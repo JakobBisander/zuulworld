@@ -259,7 +259,7 @@ public class Game {
              
     }
     
-    private NPC man, voice;
+    private NPC man, voice, villager;
     private void createNPC() {
         man = new NPC("man", "Hello", " A mysterious man appers out of no where.");
         man.setQuestions("Who are you?", "Where am I?", "Can you please help me get off this island?");
@@ -270,6 +270,11 @@ public class Game {
         voice.setQuestions("A skull", "A ghost", "An old man");
         voice.setAnswers("You may enter", "You are not worthy", "You are not worthy");
         tunnel.setNPC("voice", voice);
+        
+        villager = new NPC("villager", "What are you doing here?", " An villager stands outside the village, he looks upset.");
+        villager.setQuestions("Is something wrong?", "What is this place?", "Can you help me get to the boat on the north coast?");
+        villager.setAnswers("My village is in shock.. My only daughter has been taken by the mighty dragon!", "This is the only village on Zuul island", "If you can defeat the dragon at the top of the mountain, and safely get my daughter back, we'll help you get off the island!");
+        village.setNPC("villager", villager);
     }
     /**
      * 
@@ -286,10 +291,15 @@ public class Game {
             if(!currentRoom.hasItem(item)) {
                 System.out.println("That item doesn't exist here.");
             } else {
-                currentPlayer.addItem(item, currentRoom.getItem(item));
-                currentRoom.removeItem(item);
-                showStats();
-                System.out.println(currentRoom.getLongDescription());
+                if(currentPlayer.getCarryCurrent() < 2) {
+                    currentPlayer.addItem(item, currentRoom.getItem(item));
+                    currentRoom.removeItem(item);
+                    showStats();
+                    System.out.println(currentRoom.getLongDescription());
+                } else {
+                    System.out.println("Your inventory is full!");
+                    System.out.println("If you want to pick up the item, you must first drop one of your current items!");
+                }
             }
         }
         
@@ -310,6 +320,8 @@ public class Game {
                 System.out.println("You don't have that item!");
             } else {
                 currentPlayer.dropItem(key);
+                showStats();
+                System.out.println(currentRoom.getLongDescription());
             }
         }
     }
