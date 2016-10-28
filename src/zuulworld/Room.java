@@ -10,20 +10,20 @@ public class Room
 {
     private String description;
     private String location;
-    private String weaponDes;
     private HashMap<String, Room> exits;
     private HashMap<Room, Creature> creatures;
     private HashMap<String, Items> items;
+    
 
-    public Room(String description, String wepDes, String location) {
+    public Room(String description, String location) {
         this.location = location;
         this.description = description;
-        this.weaponDes = wepDes;
         exits = new HashMap<String, Room>();
         creatures = new HashMap<Room, Creature>();
         items = new HashMap<String, Items>();
+        
     }
-
+    
     public void setExit(String direction, Room neighbor) {
         exits.put(direction, neighbor);
     }
@@ -37,12 +37,25 @@ public class Room
     }
 
     public String getLongDescription() {
-        String des = "You are " + description + ".\n" + getExitString();
-        if(!items.isEmpty()) {
-            des = "You are " + description + weaponDes + ".\n" + getExitString();
+        if(creatures.isEmpty()){
+            if(!items.isEmpty()) {
+                String itemDescription = "";
+            
+                for (Items i : items.values()) {
+                    itemDescription += i.getDescription();
+                }
+                return "You are " + description + itemDescription + "..\n" + getExitString();
+            }
+            return "You are " + description + ".\n" + getExitString();
+        } else {
+            String creatureDescription = "";
+            for (Creature i : creatures.values()) {
+                creatureDescription += i.getDescription();
+            }
+            return "You are " + description + creatureDescription + "..\n" + getExitString();
         }
-        return des;
     }
+    
 
     private String getExitString() {
         String returnString = "Exits:";
@@ -80,9 +93,9 @@ public class Room
     public void removeItem(String key) {
         items.remove(key);
     }
-//    public Creature getCreature(String name){
-//        return creatures.get(name);
-//    }
+    public void removeCreature() {
+        creatures.clear();
+    }
   
 }
 

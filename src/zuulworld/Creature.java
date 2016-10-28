@@ -12,12 +12,14 @@ package zuulworld;
 public class Creature {
 
     private String name;
+    private String description;
     private int health;
     private int attack;
     public boolean isAlive;
 
-    public Creature(String name, int health, int attack) {
+    public Creature(String name, String description, int health, int attack) {
         this.name = name;
+        this.description = description;
         this.health = health;
         this.attack = attack;
         this.isAlive = true;
@@ -53,6 +55,7 @@ public class Creature {
     public boolean getStatus() {
 
         return isAlive;
+        
     }
 
     /**
@@ -106,5 +109,8 @@ public class Creature {
         roll = roll - dmgRoll.intValue();
 
         return (roll);
+    }
+    public String getDescription() {
+        return this.description;
     }
 }

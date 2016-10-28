@@ -16,17 +16,19 @@ public class Items {
     private int weight;
     private boolean pickUp;
     private int health;
-    private String itemDes;
+    private String description;
 
     /**
      * 
-     * @param name = the name of the item.
-     * @param pu = a boolean defining if the item should be able to get picked up.
-     * @param dmg = the damage of the wepon.
-     * @param wgt = the weight of the wepon. 
+     * @param name
+     * @param description
+     * @param pu
+     * @param dmg
+     * @param wgt 
      */
-    public Items(String name, boolean pu, int dmg, int wgt) {
+    public Items(String name, String description, boolean pu, int dmg, int wgt) {
         this.name = name;
+        this.description = description;
         this.pickUp = pu;
         this.damage = dmg;
         this.weight = wgt;
@@ -35,30 +37,20 @@ public class Items {
 
     /**
      * 
-     * @param name = the name of the item.
-     * @param pu = a boolean defining if the item should be able to get picked up.
-     * @param hp = the amount of health the item will give the player.
+     * @param name
+     * @param description
+     * @param pu
+     * @param hp 
      */
-    public Items(String name, boolean pu, int hp) {
+    public Items(String name, String description, boolean pu, int hp) {
         this.name = name;
+        this.description = description;
         this.pickUp = pu;
         this.health = hp;
     }
 
-    /**
-     * 
-     * @param des 
-     */
-    public void setItemDes(String des) {
-        this.itemDes = des;
-    }
-
-    /**
-     * 
-     * @return 
-     */
-    public String getItemDes() {
-        return itemDes;
+    public boolean getPickUp() {
+        return pickUp;
     }
 
     /**
@@ -75,5 +67,11 @@ public class Items {
      */
     public String getName() {
         return name;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public int getHealth() {
+        return health;
     }
 }

@@ -48,3 +48,4 @@ Temporary Items
 
 # Custom ignores
 nbproject/private/private.xml
+/dist/

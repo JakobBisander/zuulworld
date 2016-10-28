@@ -59,7 +59,7 @@ public class Player {
 
         return inCombat;
     }
-
+    
     /**
      * Changes the combat-status of the player.
      */
@@ -133,14 +133,18 @@ public class Player {
     }
 
     public void addItem(String name, Items item) {
-        if (carryCurrent < carryCapacity) {
-            items.put(name, item);
-            System.out.println("You now have a " + name + "!");
-            this.attack = this.attack + items.get(name).getDMG();
-            carryCurrent++;
+        if (item.getPickUp() == true) {
+            if (carryCurrent < carryCapacity) {
+                items.put(name, item);
+                System.out.println("You now have a " + name + "!");
+                this.attack = this.attack + items.get(name).getDMG();
+                carryCurrent++;
 
+            } else {
+                System.out.println("Your inventory is full");
+            }
         } else {
-            System.out.println("Your inventory is full");
+            this.health = this.health + item.getHealth();
         }
     }
 

@@ -19,6 +19,7 @@ public class Game {
     public Game() {
 
         createRooms();
+        createCreatures();
         createItem();
         newPlayer();
         parser = new Parser();
@@ -34,15 +35,15 @@ public class Game {
     private Room beach, jungle, river, crash, desert, village, mountain, volcano, tunnel;
     private void createRooms() {
         
-        beach = new Room("at the beach where you first washed up.", "", "beach");
-        jungle = new Room("in a dense part of the jungle.", " You see a sword laying on the ground.","jungle");
-        river = new Room("by a river in the midst of the jungle. A tiger is sleeping near the bank of the river.", " You see a bow laying neer the tiger next to a blody corpse.", "river");
-        crash = new Room("at the site where the plane crashed.", " By the crash you see a stick", "crash");
-        desert = new Room("in a desolate desert.", "", "desert");
-        village = new Room("at the village of a local tribe.", "","village");
-        mountain = new Room("on the slope of a mountain.", "", "mountain");
-        volcano = new Room("inside an volcano LotR-style.", "", "volcano");
-        tunnel = new Room("inside a cave.", " You see a old gun laying in the shadows.", "tunnel");
+        beach = new Room("at the beach where you first washed up.", "beach");
+        jungle = new Room("in a dense part of the jungle.", "jungle");
+        river = new Room("by a river in the midst of the jungle.", "river");
+        crash = new Room("at the site where the plane crashed.", "crash");
+        desert = new Room("in a desolate desert.", "desert");
+        village = new Room("at the village of a local tribe.", "village");
+        mountain = new Room("on the slope of a mountain.", "mountain");
+        volcano = new Room("inside a volcano where lava is sputtering against the old stone walls.", "volcano");
+        tunnel = new Room("inside a cave.", "tunnel");
 
         beach.setExit("south", jungle);
         beach.setExit("west", crash);
@@ -78,16 +79,6 @@ public class Game {
         village.setExit("flee", beach);
 
         currentRoom = beach;
-
-        Creature tiger, boss, giant, crab, dummy;
-        tiger = new Creature("tiger", 100, 5);
-        boss = new Creature("boss", 100, 15);
-        giant = new Creature("giant", 70, 10);
-        crab = new Creature("crab", 15, 3);
-        dummy = new Creature("dummy", 5, 0);
-
-        river.setCreature(river, tiger);
-        crash.setCreature(crash, crab);
 
     }
 
@@ -203,26 +194,53 @@ public class Game {
             System.out.println("You can't do that right now!");     // If the player is in combat, the 'go' command cannot be used. 
         }
     }
-    
+    private void createCreatures() {
+        
+        Creature tiger = new Creature("tiger", " A tiger is sleeping near the bank of the river.", 100, 5);
+        river.setCreature(river, tiger);
+        
+        Creature dragon = new Creature("dragon", " On the highest rock in the volcano sits a giant red dragon. Beneath the dragon lays the girl missing from the village.", 100, 15);
+        volcano.setCreature(volcano, dragon);
+        
+        Creature giant = new Creature("giant", " A giant rises from the sand.", 70, 10);
+        desert.setCreature(desert, giant);
+        
+        Creature crab = new Creature("crab", " A giant angry crab storms out of the wreckage. ", 15, 3);
+        crash.setCreature(crash, crab);
+        
+             
+    }
     /**
      * 
      */
     private void createItem() {
-        Items sword = new Items("sword", true, 10, 1);
-        sword.setItemDes("A sword in good condition");
+        //Weapons
+        Items sword = new Items("sword", " There is a sword laying in the shadows.", true, 100, 1);
         jungle.placeItem("sword", sword);
         
-        Items bow = new Items("bow", true, 7, 1);
-        bow.setItemDes("A old bow");
+        Items bow = new Items("bow", " You see an old bow hanging from a tree.", true, 7, 1);
         river.placeItem("bow", bow);
         
-        Items gun = new Items("gun", true, 100, 1);
-        gun.setItemDes("An old gun with a few bullets");
+        Items gun = new Items("gun", " You see an old gun laying on the floor.", true, 25, 1);
         tunnel.placeItem("gun", gun);
         
-        Items stick = new Items("stick", true, 2, 1);
-        stick.setItemDes("A wooden stick");
+        Items stick = new Items("stick", " You see a stick laying on the ground, maybe you can use it as a weapon.", true, 2, 1);
         crash.placeItem("stick", stick);
+        
+        Items spear = new Items("spear", " There is a spear stuck in the ground.", true, 15, 1);
+        jungle.placeItem("spear", spear);
+        
+        Items knife = new Items("knife", " There is a small rusty knife laying in the sand", true, 5, 1);
+        desert.placeItem("knife", knife);
+        
+        //health items
+        Items banana = new Items("banana", " There is a banana laying on the ground.", false, 10);
+        river.placeItem("banana", banana);
+        
+        Items coconut = new Items("coconut", " There is a coconut laying next to an old tree.", false, 5);
+        jungle.placeItem("coconut", coconut);
+        
+        
     }
     /**
      * 
@@ -242,6 +260,7 @@ public class Game {
                 currentPlayer.addItem(item, currentRoom.getItem(item));
                 currentRoom.removeItem(item);
                 showStats();
+                System.out.println(currentRoom.getLongDescription());
             }
         }
         
@@ -337,8 +356,19 @@ public class Game {
 
             }
         } else {
-            System.out.println("The " + currentCreature.getName() + " has died!");
-            currentPlayer.changeStatus();
+            if(currentCreature.getName() == "dragon") {
+                System.out.println("The " + currentCreature.getName() + " has died!");
+                currentPlayer.changeStatus();
+                currentRoom.removeCreature();
+                endGameDescription();
+                System.exit(0);
+                
+            } else {
+                System.out.println("The " + currentCreature.getName() + " has died!");
+                currentPlayer.changeStatus();
+                currentRoom.removeCreature();
+                System.out.println("\n" + currentRoom.getLongDescription());
+            }
         }
 
     }
@@ -366,6 +396,9 @@ public class Game {
         currentRoom = nextRoom;
         System.out.println("You run away from the creature, and dont stop until you reach the beach again.");
         System.out.println(currentRoom.getLongDescription());
+    }
+    private void endGameDescription() {
+        System.out.println("You escaped the island!");
     }
     /**
      * 
