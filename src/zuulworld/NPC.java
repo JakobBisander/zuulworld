@@ -17,23 +17,23 @@ public class NPC {
     // https://docs.oracle.com/javase/tutorial/java/concepts/interface.html
 
     
-    String welcomeMessage;
-    int chosenAnswer;
-    HashMap<Integer, String> answer = new HashMap<>();
-    HashMap<Integer, String> question = new HashMap<>();
-    Scanner sc = new Scanner(System.in);
+    String welcomeMessage; // A welcome message that the object will return upon contact
+    int chosenAnswer; // the key value for the answer chosen in a conversation. Used for checking when you want to leave the converstation
+    HashMap<Integer, String> answer = new HashMap<>(); // HashMap for answers
+    HashMap<Integer, String> question = new HashMap<>(); // HashMap for answers
+    Scanner sc = new Scanner(System.in); // Scanner for getting input for the questions&answers
     
     
     
-    public NPC(String name, String welcomeMessage) {
+    public NPC(String name, String welcomeMessage) {  // Constructor lets you assign a nae and welcome message.
         
     }
     
-    public void setWelcomeMessage(String set){
+    public void setWelcomeMessage(String set){ // setting method for welcomeMessage
         welcomeMessage = set;
     }
     
-    public String getWelcomeMessage() {
+    public String getWelcomeMessage() { // getter for welcomeMessage
         return welcomeMessage;
     }
     
@@ -60,20 +60,20 @@ public class NPC {
      * @param set2
      * @param set3 
      */
-    public void setQuestions(String set1, String set2, String set3) {
+    public void setQuestions(String set1, String set2, String set3) { // setting method for questions. Sets 3 questions for the player to choose from.
         question.put(1, set1);
         question.put(2, set2);
         question.put(3, set3);
     }
     
-    public void setAnswers (String set1, String set2, String set3) {
+    public void setAnswers (String set1, String set2, String set3) { // setting method for answers. Sets 3 answers that the player can get in return from his question
         answer.put(1, set1);
         answer.put(2, set2);
         answer.put(3, set3);
         answer.put(4, "Goodbye");
     }
     
-    public void returnQuestions() {
+    public void returnQuestions() { // Return the possible questions for the player to ask.
         System.out.println("Please choose one of the following three answers:");
         System.out.println("1: " + question.get(1));
         System.out.println("2: " + question.get(2));
@@ -81,19 +81,19 @@ public class NPC {
         System.out.println();
     }
     
-    public int chosenAnswer() {
+    public int chosenAnswer() { // An integer set by switchAnswers. It is the key of the answers hashmap.
         return chosenAnswer;
     }
     
-    public String switchAnswers() {
-        int key;
-        String value;    
+    public String switchAnswers() { // This method carries out the conversation itself.
+        int key; // key of the hashmap
+        String value; // value of the hashmap
         
         System.out.print(">");
-        key = sc.nextInt();
-        value = answer.get(key);
-        chosenAnswer = key;
-        if(!answer.containsKey(key)){
+        key = sc.nextInt(); // Next scanner input will set the key value
+        value = answer.get(key); // Gets the string from the hashmap value at the key of "key"
+        chosenAnswer = key; 
+        if(!answer.containsKey(key)){ // This if-statement checks if the answer chosen is contained by the hashmap of answers.
             return "Not a possible answer";
         }
         return value;

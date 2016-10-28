@@ -1,7 +1,5 @@
 package zuulworld;
 
-import java.util.Scanner;
-
 /**
  *
  *
@@ -190,23 +188,47 @@ public class Game {
         String target = command.getSecondWord();
         
         if(target.equals("mysterious")) {
-            NPC mysterious;
-
-            
+            NPC mysterious;            
             mysterious = new NPC("mysterious man", "Hello");
             currentNPC = mysterious;
-            currentNPC.setWelcomeMessage("Hello!");
             System.out.println(currentNPC.getWelcomeMessage());
             currentNPC.setQuestions("Who are you?", "Where am I?", "Can you please help me get off this island?");
-            currentNPC.setAnswers("I am god!", "You are on The Island of Zuul!", "You must help yourself get off this island. The village in the east will be able to help you!");
-            
-            currentNPC.returnQuestions();
-            
+            currentNPC.setAnswers("I am god!", "You are on The Island of Zuul!", "You must help yourself get off this island. The village in the east will be able to help you!");            
+            currentNPC.returnQuestions();            
             while(currentNPC.chosenAnswer!=4){
             System.out.println(currentNPC.switchAnswers());   
             }
+            
+        
         }
         
+        if(target.equals("voice")) {
+            NPC voice;
+            voice = new NPC("voice", "");
+            currentNPC = voice;
+            currentNPC.setWelcomeMessage("I don’t have eyes, but once i did see. Once i had thoughts, but now i’m empty. What am i?");
+            System.out.println(currentNPC.getWelcomeMessage());
+            currentNPC.setQuestions("A skull", "A ghost", "An old man");
+            currentNPC.setAnswers("You may enter", "You are not worthy", "You are not worthy");
+            currentNPC.returnQuestions();
+            
+            while(currentNPC.chosenAnswer!=4){
+            if(currentNPC.chosenAnswer==2 || currentNPC.chosenAnswer==3) {
+                System.out.println("You take a hit of 5 health points");
+                currentPlayer.takeHit(-5);
+                        }
+            
+                System.out.println(currentNPC.switchAnswers());
+                
+            }
+
+        }
+        else{
+            System.out.println("There is no one to talk to here");
+        }
+    
+        
+    
     }
     }
 
