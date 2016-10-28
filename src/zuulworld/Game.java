@@ -15,12 +15,14 @@ public class Game {
     private Player currentPlayer;
     private Creature currentCreature;
     private boolean firstCombat;
+    private NPC currentNPC;
 
     public Game() {
 
         createRooms();
         createCreatures();
         createItem();
+        createNPC();
         newPlayer();
         parser = new Parser();
         firstCombat = true;
@@ -35,15 +37,15 @@ public class Game {
     private Room beach, jungle, river, crash, desert, village, mountain, volcano, tunnel;
     private void createRooms() {
         
-        beach = new Room("at the beach where you first washed up.", "beach");
-        jungle = new Room("in a dense part of the jungle.", "jungle");
-        river = new Room("by a river in the midst of the jungle.", "river");
-        crash = new Room("at the site where the plane crashed.", "crash");
-        desert = new Room("in a desolate desert.", "desert");
-        village = new Room("at the village of a local tribe.", "village");
-        mountain = new Room("on the slope of a mountain.", "mountain");
-        volcano = new Room("inside a volcano where lava is sputtering against the old stone walls.", "volcano");
-        tunnel = new Room("inside a cave.", "tunnel");
+        beach = new Room("at the beach where you first washed up.", "To the west, down the beach, you see flames and smoke rising to the sky from your plane wreck. To the south, a deep jungle starts.", "beach");
+        jungle = new Room("in a dense part of the jungle.", "To the north is the beach where you washed up, and to the west the jungle seems to thin out into a desert. To the south a mountain slope appears to start, and from the east you hear the faint sound of running water.", "jungle");
+        river = new Room("by a river in the midst of the jungle.", "To the south you see a cave opening and to the east you can make out a few huts. To the west the jungle seems to get denser.", "river");
+        crash = new Room("at the site where the plane crashed.", "Back east is where you first came ashore, and to the south the jungle starts.", "crash");
+        desert = new Room("in a desolate desert.", "Back east the jungle blooms.", "desert");
+        village = new Room("at the village of a local tribe.", "Back west is the river at the edge of the jungle.", "village");
+        mountain = new Room("on the slope of a mountain.", "To the south the mountain climbs even higher, and ends in a smoke-spewing volcano. To the north is the jungle.", "mountain");
+        volcano = new Room("inside a volcano where lava is sputtering against the old stone walls.", "To the north is back out on the mountainside.", "volcano");
+        tunnel = new Room("inside a cave. A pillar in the cave is marked by a rune in the shape of a triangle.", "Back north is the exit of the cave, to the river.", "tunnel");
 
         beach.setExit("south", jungle);
         beach.setExit("west", crash);
@@ -101,6 +103,15 @@ public class Game {
     private void printWelcome() {
 
         System.out.println("Welcome to the Isle of Zuul!");
+        System.out.println("");
+        System.out.println("You are making an overflight to discover a new group of islands.");
+        System.out.println("To the east you see a small village, with smoke coming from the huts.");
+        System.out.println("Suddenly your instruments malfunctions, and your plane plunges to the ground.");
+        System.out.println("You luckily manage to activate your emergency parachute and land in the ocean...");
+        System.out.println("You pass out...");
+        System.out.println("Later you wake up to the sound of the waves hitting the beach and see a big boat in the horizon.");
+        System.out.println("You try to make contact to the boat, but they don’t see you.");
+        System.out.println("");
         System.out.println("<<<<<<<<<<<<<< Game Explanation >>>>>>>>>>>>");
         System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println();
@@ -133,6 +144,8 @@ public class Game {
             takeItem(command);
         } else if (commandWord == CommandWord.DROP) {
             dropItem(command);
+        } else if (commandWord == CommandWord.TALK) {
+            startConversation(command);
         } else if (commandWord == CommandWord.STATS) {
             showStats();
         } else if (commandWord == CommandWord.QUIT) {
@@ -159,7 +172,7 @@ public class Game {
 
             System.out.println("You are " + currentRoom.getShortDescription());
             System.out.println();
-            System.out.println("Your command words are: 'help', 'go', 'attack' and 'quit'. ");
+            System.out.println("Your command words are: 'help', 'go', 'attack', 'take', 'drop', 'stats' and 'quit'. ");
 
             //parser.showCommands();
         }
@@ -194,18 +207,19 @@ public class Game {
             System.out.println("You can't do that right now!");     // If the player is in combat, the 'go' command cannot be used. 
         }
     }
+    private Creature tiger, dragon, golem, crab;
     private void createCreatures() {
         
-        Creature tiger = new Creature("tiger", " A tiger is sleeping near the bank of the river.", 100, 5);
+        tiger = new Creature("tiger", " A tiger is sleeping near the bank of the river, next to a bloody corpse.", 100, 5);
         river.setCreature(river, tiger);
         
-        Creature dragon = new Creature("dragon", " On the highest rock in the volcano sits a giant red dragon. Beneath the dragon lays the girl missing from the village.", 100, 15);
+        dragon = new Creature("dragon", " A massive dragon stands before you, with enormous wings, and smoke flaring from its nostrils. Behind it, an unconscious girl is lying on the cavern floor.", 100, 15);
         volcano.setCreature(volcano, dragon);
         
-        Creature giant = new Creature("giant", " A giant rises from the sand.", 70, 10);
-        desert.setCreature(desert, giant);
+        golem = new Creature("golem", " A sand golem is standing watch near an ancient ruin. An intricate runemark is branded on its chest, in the shape of a triangle.", 120, 5);
+        desert.setCreature(desert, golem);
         
-        Creature crab = new Creature("crab", " A giant angry crab storms out of the wreckage. ", 15, 3);
+        crab = new Creature("crab", " A giant angry crab storms out of the wreckage. ", 15, 3);
         crash.setCreature(crash, crab);
         
              
@@ -240,7 +254,22 @@ public class Game {
         Items coconut = new Items("coconut", " There is a coconut laying next to an old tree.", false, 5);
         jungle.placeItem("coconut", coconut);
         
-        
+        Items water = new Items("water", " There is a bottle of fresh water laying next to the plane.", false, 10);
+        crash.placeItem("water", water);
+             
+    }
+    
+    private NPC man, voice;
+    private void createNPC() {
+        man = new NPC("man", "Hello", " A mysterious man appers out of no where.");
+        man.setQuestions("Who are you?", "Where am I?", "Can you please help me get off this island?");
+        man.setAnswers("I am god!", "You are on The Island of Zuul!", "You must help yourself get off this island. The village in the east will be able to help you!"); 
+        beach.setNPC("man", man);
+                
+        voice = new NPC("voice", "I don't have eyes, but once i did see. Once i had thoughts, but now i'm empty. What am i?", " You can hear a voice through out the tunnel, maybe you are able to talk to it?");
+        voice.setQuestions("A skull", "A ghost", "An old man");
+        voice.setAnswers("You may enter", "You are not worthy", "You are not worthy");
+        tunnel.setNPC("voice", voice);
     }
     /**
      * 
@@ -397,8 +426,78 @@ public class Game {
         System.out.println("You run away from the creature, and dont stop until you reach the beach again.");
         System.out.println(currentRoom.getLongDescription());
     }
+    private void startConversation(Command command) {
+        if (currentPlayer.getStatus() == false) {
+            if(!command.hasSecondWord()) {
+                System.out.println("Talk to what?");
+                return;
+            }
+            String npc = command.getSecondWord();
+            
+            if(!currentRoom.hasNPC(npc)) {
+                System.out.println("You can't talk with that!");
+            } else {
+                currentNPC = currentRoom.getNPC(npc);
+                if(!currentNPC.getName().equals(voice.getName())) {
+                    System.out.println(currentNPC.getWelcomeMessage());
+                    currentNPC.returnQuestions();
+                    while(currentNPC.chosenAnswer!=4){
+                        System.out.println(currentNPC.switchAnswers());
+                        //currentNPC.returnQuestions();
+                    }
+                    currentRoom.getLongDescription();
+                } else {
+                    System.out.println(currentNPC.getWelcomeMessage());
+                    currentNPC.returnQuestions();
+                    while(currentNPC.chosenAnswer!=4){
+                        System.out.println(currentNPC.switchAnswers());
+                        if(currentNPC.chosenAnswer==2 || currentNPC.chosenAnswer==3) {
+                            System.out.println("You take a hit of 5 health points");
+                            currentPlayer.takeHit(-5);
+                            //currentNPC.returnQuestions();
+                        }
+                        if(currentNPC.chosenAnswer == 1) {
+                            currentRoom.removeNPC();
+                            break;
+                        }
+                    }
+                    
+                }
+                System.out.println(currentRoom.getLongDescription());
+            }
+        }
+    }
     private void endGameDescription() {
-        System.out.println("You escaped the island!");
+        if(tiger.isAlive == false) {
+            System.out.println("");
+            System.out.println("Suddenly the volcano chamber starts to collapse. \n"
+                    + "You quickly grap the unconscious girl lying on the floor and run out of the chamber. \n" + "");
+            System.out.println("You quickly grap the unconscious girl lying on the floor and run out of the chamber.");
+            System.out.println("On your way down of the mountain you hear the chamber exploding behind you.");
+            System.out.println("You quickly take cover from the explosion..");
+            System.out.println("After a while the girl wakes up, amazed not to be in the dragon’s lair no more.");
+            System.out.println("You take her back to her village.");
+            System.out.println("The village is ecstatic to get the chief’s daughter back from the evil dragon.");
+            System.out.println("To thank you for your heroism the village helps you escape the island and get to the boat you saw in the horizon.");
+            System.out.println("");
+            System.out.println("You have escaped the Isle of Zuul!");
+            System.out.println("Thanks for playing, and congratulations!");
+        } else {
+            System.out.println("");
+            System.out.println("Suddenly the volcano chamber starts to collapse.");
+            System.out.println("You quickly grap the unconscious girl lying on the floor and run out of the chamber.");
+            System.out.println("On your way down of the mountain you hear the chamber exploding behind you.");
+            System.out.println("You quickly take cover from the explosion..");
+            System.out.println("After a while the girl wakes up, amazed not to be in the dragon’s lair no more.");
+            System.out.println("On the way back you get attacked by a tiger laying in the shadows.");
+            System.out.println("You stall the tiger while the girl makes her escape to the village.");
+            System.out.println("In the fight with the tiger you get wounded badly, but still manages to get back to the village before you collapse.");
+            System.out.println("You wake up after a few weeks to the shocking realization that the boat already is gone.");
+            System.out.println("For your heroism you are welcomed as a new citizen in the village.");
+            System.out.println("");
+            System.out.println("You have survived the Isle of Zuul!");
+            System.out.println("Thanks for playing, and congratulations!");
+        }
     }
     /**
      * 

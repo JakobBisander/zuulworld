@@ -10,17 +10,21 @@ public class Room
 {
     private String description;
     private String location;
+    private String exitDesciption;
     private HashMap<String, Room> exits;
     private HashMap<Room, Creature> creatures;
     private HashMap<String, Items> items;
+    private HashMap<String, NPC> npc;
     
 
-    public Room(String description, String location) {
+    public Room(String description, String exitDesciption, String location) {
         this.location = location;
         this.description = description;
+        this.exitDesciption = exitDesciption;
         exits = new HashMap<String, Room>();
         creatures = new HashMap<Room, Creature>();
         items = new HashMap<String, Items>();
+        npc = new HashMap<String, NPC>();
         
     }
     
@@ -31,28 +35,38 @@ public class Room
     public void setCreature(Room room, Creature creature){
         creatures.put(room, creature);
     }
-    
+    public void setNPC(String name, NPC person) {
+        npc.put(name, person);
+    }
     public String getShortDescription() {
         return description;
     }
 
     public String getLongDescription() {
-        if(creatures.isEmpty()){
-            if(!items.isEmpty()) {
-                String itemDescription = "";
-            
-                for (Items i : items.values()) {
-                    itemDescription += i.getDescription();
+        if(npc.isEmpty()) {
+            if(creatures.isEmpty()){
+                if(!items.isEmpty()) {
+                    String itemDescription = "";
+
+                    for (Items i : items.values()) {
+                        itemDescription += i.getDescription();
+                    }
+                    return "You are " + description + itemDescription + "..\n" + exitDesciption/* + getExitString()*/;
                 }
-                return "You are " + description + itemDescription + "..\n" + getExitString();
+                return "You are " + description + ".\n" + exitDesciption /*+ getExitString()*/;
+            } else {
+                String creatureDescription = "";
+                for (Creature i : creatures.values()) {
+                    creatureDescription += i.getDescription();
+                }
+                return "You are " + description + creatureDescription + "..\n" + exitDesciption /*+ getExitString()*/;
             }
-            return "You are " + description + ".\n" + getExitString();
         } else {
-            String creatureDescription = "";
-            for (Creature i : creatures.values()) {
-                creatureDescription += i.getDescription();
+            String npcDescription = "";
+            for (NPC i : npc.values()) {
+                npcDescription += i.getNpcDescription();
             }
-            return "You are " + description + creatureDescription + "..\n" + getExitString();
+            return "You are " + description + npcDescription + "..\n" + exitDesciption;
         }
     }
     
@@ -80,6 +94,7 @@ public class Room
     public Creature getCreature(Room room){
         return creatures.get(room);
     }
+    
     public void placeItem(String name, Items item) {
         items.put(name, item);
     }
@@ -96,6 +111,18 @@ public class Room
     public void removeCreature() {
         creatures.clear();
     }
+    public boolean hasNPC(String a) {
+        return npc.containsKey(a);
+    }
+    public NPC getNPC(String key) {
+        return npc.get(key);
+    }
+    public void removeNPC() {
+        npc.clear();
+    }
+    
+
+    
   
 }
 
