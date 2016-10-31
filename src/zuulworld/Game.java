@@ -113,6 +113,7 @@ public class Game {
         System.out.println("Later you wake up to the sound of the waves hitting the beach and see a big boat in the horizon.");
         System.out.println("You try to make contact to the boat, but they don’t see you.");
         System.out.println("");
+        System.out.println("Your command words are: 'help', 'go', 'attack', 'take', 'drop', 'talk', 'stats' and 'quit'. ");
         System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println();
         System.out.println(currentRoom.getLongDescription());
