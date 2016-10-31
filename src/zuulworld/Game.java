@@ -52,6 +52,7 @@ public class Game {
 
         crash.setExit("east", beach);
         crash.setExit("flee", beach);
+        crash.setExit("south", jungle);
 
         jungle.setExit("north", beach);
         jungle.setExit("west", desert);
@@ -112,7 +113,6 @@ public class Game {
         System.out.println("Later you wake up to the sound of the waves hitting the beach and see a big boat in the horizon.");
         System.out.println("You try to make contact to the boat, but they don’t see you.");
         System.out.println("");
-        System.out.println("<<<<<<<<<<<<<< Game Explanation >>>>>>>>>>>>");
         System.out.println("Type '" + CommandWord.HELP + "' if you need help.");
         System.out.println();
         System.out.println(currentRoom.getLongDescription());
@@ -172,7 +172,7 @@ public class Game {
 
             System.out.println("You are " + currentRoom.getShortDescription());
             System.out.println();
-            System.out.println("Your command words are: 'help', 'go', 'attack', 'take', 'drop', 'stats' and 'quit'. ");
+            System.out.println("Your command words are: 'help', 'go', 'attack', 'take', 'drop', 'talk', 'stats' and 'quit'. ");
 
             //parser.showCommands();
         }
