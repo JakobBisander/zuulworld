@@ -427,6 +427,11 @@ public class Game {
                 currentPlayer.changeStatus();
                 currentRoom.removeCreature();
                 System.out.println("\n" + currentRoom.getLongDescription());
+            } else {
+                System.out.println("The " + currentCreature.getName() + " has died!");
+                currentPlayer.changeStatus();
+                currentRoom.removeCreature();
+                System.out.println("\n" + currentRoom.getLongDescription());
             }
         }
 
