@@ -140,6 +140,8 @@ public class Player {
             carryCurrent++;
         } else {
             this.health = this.health + item.getHealth();
+            System.out.println("You ate a " + name + "!");
+            System.out.println("Your health incressed!");
         }
     }
 

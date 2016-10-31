@@ -207,20 +207,25 @@ public class Game {
             System.out.println("You can't do that right now!");     // If the player is in combat, the 'go' command cannot be used. 
         }
     }
-    private Creature tiger, dragon, golem, crab;
+    private Creature tiger, dragon, golem, crab, yeti;
     private void createCreatures() {
         
-        tiger = new Creature("tiger", " A tiger is sleeping near the bank of the river, next to a bloody corpse.", 100, 5);
+        tiger = new Creature("tiger", " A tiger is sleeping near the bank of the river, next to a bloody corpse.", 75, 7);
         river.setCreature(river, tiger);
         
-        dragon = new Creature("dragon", " A massive dragon stands before you, with enormous wings, and smoke flaring from its nostrils. Behind it, an unconscious girl is lying on the cavern floor.", 100, 15);
+        dragon = new Creature("dragon", " A massive dragon stands before you, with enormous wings, and smoke flaring from its nostrils. "
+                                        + "Behind it, an unconscious girl is lying on the cavern floor.", 100, 15);
         volcano.setCreature(volcano, dragon);
         
-        golem = new Creature("golem", " A sand golem is standing watch near an ancient ruin. An intricate runemark is branded on its chest, in the shape of a triangle.", 120, 5);
+        golem = new Creature("golem", " A sand golem is standing watch near an ancient ruin. An intricate runemark is branded "
+                                + "on its chest, in the shape of a triangle.", 120, 3);
         desert.setCreature(desert, golem);
         
         crab = new Creature("crab", " A giant angry crab storms out of the wreckage. ", 15, 3);
         crash.setCreature(crash, crab);
+        
+        yeti = new Creature("yeti", " A ferocious yeti is standing on the mountain side.", 40, 5);
+        mountain.setCreature(mountain, yeti);
         
              
     }
@@ -229,33 +234,45 @@ public class Game {
      */
     private void createItem() {
         //Weapons
-        Items sword = new Items("sword", " There is a sword laying in the shadows.", true, 100, 1);
-        jungle.placeItem("sword", sword);
+        Items sword = new Items("sword", " There is a sword laying in the shadows.", true, 10, 1);
+        river.placeItem("sword", sword);
         
         Items bow = new Items("bow", " You see an old bow hanging from a tree.", true, 7, 1);
-        river.placeItem("bow", bow);
+        jungle.placeItem("bow", bow);
         
-        Items gun = new Items("gun", " You see an old gun laying on the floor.", true, 25, 1);
-        tunnel.placeItem("gun", gun);
+        Items mjolnir = new Items("mjolnir", " You see an shiny object crackling with thunder, could that be the legendary mjolnir?", true, 25, 1);
+        tunnel.placeItem("mjolnir", mjolnir);
         
         Items stick = new Items("stick", " You see a stick laying on the ground, maybe you can use it as a weapon.", true, 2, 1);
         crash.placeItem("stick", stick);
         
         Items spear = new Items("spear", " There is a spear stuck in the ground.", true, 15, 1);
-        jungle.placeItem("spear", spear);
+        mountain.placeItem("spear", spear);
         
         Items knife = new Items("knife", " There is a small rusty knife laying in the sand", true, 5, 1);
         desert.placeItem("knife", knife);
         
         //health items
-        Items banana = new Items("banana", " There is a banana laying on the ground.", false, 10);
+        Items banana = new Items("banana", " There is a banana laying on the ground.", false, 6);
         river.placeItem("banana", banana);
         
         Items coconut = new Items("coconut", " There is a coconut laying next to an old tree.", false, 5);
         jungle.placeItem("coconut", coconut);
         
-        Items water = new Items("water", " There is a bottle of fresh water laying next to the plane.", false, 10);
-        crash.placeItem("water", water);
+        Items bread = new Items("bread", " There is a loaf of bread laying next to the plane.", false, 10);
+        crash.placeItem("bread", bread);
+        
+        Items pineapple = new Items("pineapple", " There is a pineapple by the foot of a giant tree nearby", false, 7);
+        river.placeItem("pineapple", pineapple);
+        
+        Items cactus = new Items("cactus", " There is a cactus blooming in at the edge of the desert", false, 3);
+        desert.placeItem("cactus", cactus);
+        
+        Items potion = new Items("potion", " There is a golden potion sitting on a stone shelf.", false, 20);
+        tunnel.placeItem("potion", potion);
+        
+        Items egg = new Items("egg", " There is a egg, laying in a old nest at the to of the mountain.", false, 10);
+        mountain.placeItem("egg", egg);
              
     }
     
@@ -268,7 +285,7 @@ public class Game {
                 
         voice = new NPC("voice", "I don't have eyes, but once i did see. Once i had thoughts, but now i'm empty. What am i?", " You can hear a voice through out the tunnel, maybe you are able to talk to it?");
         voice.setQuestions("A skull", "A ghost", "An old man");
-        voice.setAnswers("You may enter", "You are not worthy", "You are not worthy");
+        voice.setAnswers("You may enter!" + "\n" + "A giant boulder rolls to the side to reveal a mighty weapon!", "You are not worthy", "You are not worthy");
         tunnel.setNPC("voice", voice);
         
         villager = new NPC("villager", "What are you doing here?", " An villager stands outside the village, he looks upset.");
@@ -291,7 +308,7 @@ public class Game {
             if(!currentRoom.hasItem(item)) {
                 System.out.println("That item doesn't exist here.");
             } else {
-                if(currentPlayer.getCarryCurrent() < 2) {
+                if(currentPlayer.getCarryCurrent() < 2 || currentRoom.getItem(item).getPickUp() == false) {
                     currentPlayer.addItem(item, currentRoom.getItem(item));
                     currentRoom.removeItem(item);
                     showStats();
@@ -404,8 +421,9 @@ public class Game {
                 endGameDescription();
                 System.exit(0);
                 
-            } else {
-                System.out.println("The " + currentCreature.getName() + " has died!");
+            } else if(currentCreature.getName() == "golem") {
+                System.out.println("With it's final breath, the golem whispers:");
+                System.out.println("To find the hidden chamber.. use your head..");
                 currentPlayer.changeStatus();
                 currentRoom.removeCreature();
                 System.out.println("\n" + currentRoom.getLongDescription());
@@ -482,8 +500,7 @@ public class Game {
     private void endGameDescription() {
         if(tiger.isAlive == false) {
             System.out.println("");
-            System.out.println("Suddenly the volcano chamber starts to collapse. \n"
-                    + "You quickly grap the unconscious girl lying on the floor and run out of the chamber. \n" + "");
+            System.out.println("Suddenly the volcano chamber starts to collapse.");
             System.out.println("You quickly grap the unconscious girl lying on the floor and run out of the chamber.");
             System.out.println("On your way down of the mountain you hear the chamber exploding behind you.");
             System.out.println("You quickly take cover from the explosion..");

@@ -51,15 +51,15 @@ public class Room
                     for (Items i : items.values()) {
                         itemDescription += i.getDescription();
                     }
-                    return "You are " + description + itemDescription + "..\n" + exitDesciption/* + getExitString()*/;
+                    return "You are " + description + itemDescription + "..\n" + exitDesciption;
                 }
-                return "You are " + description + ".\n" + exitDesciption /*+ getExitString()*/;
+                return "You are " + description + ".\n" + exitDesciption;
             } else {
                 String creatureDescription = "";
                 for (Creature i : creatures.values()) {
                     creatureDescription += i.getDescription();
                 }
-                return "You are " + description + creatureDescription + "..\n" + exitDesciption /*+ getExitString()*/;
+                return "You are " + description + creatureDescription + "..\n" + exitDesciption;
             }
         } else {
             String npcDescription = "";
