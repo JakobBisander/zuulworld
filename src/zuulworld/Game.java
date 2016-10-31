@@ -37,13 +37,13 @@ public class Game {
     private Room beach, jungle, river, crash, desert, village, mountain, volcano, tunnel;
     private void createRooms() {
         
-        beach = new Room("at the beach where you first washed up.", "To the west, down the beach, you see flames and smoke rising to the sky from your plane wreck. To the south, a deep jungle starts.", "beach");
-        jungle = new Room("in a dense part of the jungle.", "To the north is the beach where you washed up, and to the west the jungle seems to thin out into a desert. To the south a mountain slope appears to start, and from the east you hear the faint sound of running water.", "jungle");
-        river = new Room("by a river in the midst of the jungle.", "To the south you see a cave opening and to the east you can make out a few huts. To the west the jungle seems to get denser.", "river");
-        crash = new Room("at the site where the plane crashed.", "Back east is where you first came ashore, and to the south the jungle starts.", "crash");
+        beach = new Room("at the beach where you first washed up.", "To the west, down the beach, you see flames and smoke rising to the sky from your plane wreck. \nTo the south, a deep jungle starts.", "beach");
+        jungle = new Room("in a dense part of the jungle.", "To the north is the beach where you washed up. \nTo the west the jungle seems to thin out into a desert.\nTo the south a mountain slope appears to start.\nTo the east you hear the faint sound of running water.", "jungle");
+        river = new Room("by a river in the midst of the jungle.", "To the south you see a cave opening. \nTo the east you can make out a few huts.\nTo the west the jungle seems to get denser.", "river");
+        crash = new Room("at the site where the plane crashed.", "Back east is where you first came ashore. \nTo the south the jungle starts.", "crash");
         desert = new Room("in a desolate desert.", "Back east the jungle blooms.", "desert");
         village = new Room("at the village of a local tribe.", "Back west is the river at the edge of the jungle.", "village");
-        mountain = new Room("on the slope of a mountain.", "To the south the mountain climbs even higher, and ends in a smoke-spewing volcano. To the north is the jungle.", "mountain");
+        mountain = new Room("on the slope of a mountain.", "To the south the mountain climbs even higher, and ends in a smoke-spewing volcano. \nTo the north is the jungle.", "mountain");
         volcano = new Room("inside a volcano where lava is sputtering against the old stone walls.", "To the north is back out on the mountainside.", "volcano");
         tunnel = new Room("inside a cave. A pillar in the cave is marked by a rune in the shape of a triangle.", "Back north is the exit of the cave, to the river.", "tunnel");
 
@@ -211,15 +211,15 @@ public class Game {
     private Creature tiger, dragon, golem, crab, yeti;
     private void createCreatures() {
         
-        tiger = new Creature("tiger", " A tiger is sleeping near the bank of the river, next to a bloody corpse.", 75, 7);
+        tiger = new Creature("tiger", " A tiger is sleeping near the bank of the river, next to a bloody corpse.", 75, 8);
         river.setCreature(river, tiger);
         
         dragon = new Creature("dragon", " A massive dragon stands before you, with enormous wings, and smoke flaring from its nostrils. "
-                                        + "Behind it, an unconscious girl is lying on the cavern floor.", 100, 15);
+                                        + "Behind it, an unconscious girl is lying on the cavern floor.", 100, 20);
         volcano.setCreature(volcano, dragon);
         
         golem = new Creature("golem", " A sand golem is standing watch near an ancient ruin. An intricate runemark is branded "
-                                + "on its chest, in the shape of a triangle.", 120, 3);
+                                + "on its chest, in the shape of a triangle.", 120, 5);
         desert.setCreature(desert, golem);
         
         crab = new Creature("crab", " A giant angry crab storms out of the wreckage. ", 15, 3);
@@ -317,6 +317,8 @@ public class Game {
                 } else {
                     System.out.println("Your inventory is full!");
                     System.out.println("If you want to pick up the item, you must first drop one of your current items!");
+                    System.out.println("The " + currentRoom.getItem(item).getName() + " has " + currentRoom.getItem(item).getDMG() + " DMG.");
+                    System.out.println("You can look at your current weapons under stats.");
                 }
             }
         }
@@ -401,13 +403,13 @@ public class Game {
         creatureAttack = currentCreature.damageRoll();
 
         currentCreature.takeHit(playerAttack);
-        System.out.println("You hit the " + currentCreature.getName() + " for " + playerAttack + " damage.");
+        System.out.println("You hit the " + currentCreature.getName() + " for " + (playerAttack * -1) + " damage.");
         System.out.println(currentCreature.getLife());
         currentCreature.changeStatus();
 
         if (currentCreature.getStatus() == true) {      // Checks if the creature died from the attack.
             currentPlayer.takeHit(creatureAttack);
-            System.out.println("The " + currentCreature.getName() + " hits you back for " + creatureAttack + " damage.");
+            System.out.println("The " + currentCreature.getName() + " hits you back for " + (creatureAttack * -1) + " damage.");
             System.out.println(currentPlayer.getLife());
             currentPlayer.checkPlayer();         // Checks if the players hitpoints is under 0, and marks him/her as dead if so. 
             if (currentPlayer.getDead() == true) {   // Checks if the player died from the attack. 
@@ -488,8 +490,8 @@ public class Game {
                     while(currentNPC.chosenAnswer!=4){
                         System.out.println(currentNPC.switchAnswers());
                         if(currentNPC.chosenAnswer==2 || currentNPC.chosenAnswer==3) {
-                            System.out.println("You take a hit of 5 health points");
-                            currentPlayer.takeHit(-5);
+                            System.out.println("You take a hit of 10 health points");
+                            currentPlayer.takeHit(-10);
                             //currentNPC.returnQuestions();
                         }
                         if(currentNPC.chosenAnswer == 1) {
