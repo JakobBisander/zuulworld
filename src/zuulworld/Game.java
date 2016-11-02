@@ -1,5 +1,6 @@
 package zuulworld;
 
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,10 +21,10 @@ public class Game {
     public Game() {
 
         createRooms();
-        createCreatures();
         createItem();
         createNPC();
         newPlayer();
+        newGame();
         parser = new Parser();
         firstCombat = true;
     }
@@ -32,7 +33,25 @@ public class Game {
         Player newPlayer;
         newPlayer = new Player(20, 10);
         currentPlayer = newPlayer;
+        currentPlayer.setName();
 
+    }
+    private void newGame() {
+        System.out.println("Please choose your disired difficulty:");
+        System.out.println("1: Easy Mode.");
+        System.out.println("2: Normal Mode.");
+        System.out.println("3: Hard Mode.");
+        
+        Scanner input = new Scanner(System.in);
+        int choice = input.nextInt();
+        
+        if(choice == 1) {
+            createCreaturesEasy();
+        } else if( choice == 2) {
+            createCreaturesNormal();
+        } else {
+            createCreaturesHard();
+        }
     }
     private Room beach, jungle, river, crash, desert, village, mountain, volcano, tunnel;
     private void createRooms() {
@@ -209,7 +228,7 @@ public class Game {
         }
     }
     private Creature tiger, dragon, golem, crab, yeti;
-    private void createCreatures() {
+    private void createCreaturesEasy() {
         
         tiger = new Creature("tiger", " A tiger is sleeping near the bank of the river, next to a bloody corpse.", 75, 8);
         river.setCreature(river, tiger);
@@ -226,6 +245,48 @@ public class Game {
         crash.setCreature(crash, crab);
         
         yeti = new Creature("yeti", " A ferocious yeti is standing on the mountain side.", 40, 5);
+        mountain.setCreature(mountain, yeti);
+        
+             
+    }
+        private void createCreaturesNormal() {
+        
+        tiger = new Creature("tiger", " A tiger is sleeping near the bank of the river, next to a bloody corpse.", 75, 10);
+        river.setCreature(river, tiger);
+        
+        dragon = new Creature("dragon", " A massive dragon stands before you, with enormous wings, and smoke flaring from its nostrils. "
+                                        + "Behind it, an unconscious girl is lying on the cavern floor.", 100, 25);
+        volcano.setCreature(volcano, dragon);
+        
+        golem = new Creature("golem", " A sand golem is standing watch near an ancient ruin. An intricate runemark is branded "
+                                + "on its chest, in the shape of a triangle.", 120, 7);
+        desert.setCreature(desert, golem);
+        
+        crab = new Creature("crab", " A giant angry crab storms out of the wreckage. ", 15, 5);
+        crash.setCreature(crash, crab);
+        
+        yeti = new Creature("yeti", " A ferocious yeti is standing on the mountain side.", 40, 8);
+        mountain.setCreature(mountain, yeti);
+        
+             
+    }
+            private void createCreaturesHard() {
+        
+        tiger = new Creature("tiger", " A tiger is sleeping near the bank of the river, next to a bloody corpse.", 75, 13);
+        river.setCreature(river, tiger);
+        
+        dragon = new Creature("dragon", " A massive dragon stands before you, with enormous wings, and smoke flaring from its nostrils. "
+                                        + "Behind it, an unconscious girl is lying on the cavern floor.", 100, 30);
+        volcano.setCreature(volcano, dragon);
+        
+        golem = new Creature("golem", " A sand golem is standing watch near an ancient ruin. An intricate runemark is branded "
+                                + "on its chest, in the shape of a triangle.", 120, 10);
+        desert.setCreature(desert, golem);
+        
+        crab = new Creature("crab", " A giant angry crab storms out of the wreckage. ", 15, 8);
+        crash.setCreature(crash, crab);
+        
+        yeti = new Creature("yeti", " A ferocious yeti is standing on the mountain side.", 40, 10);
         mountain.setCreature(mountain, yeti);
         
              

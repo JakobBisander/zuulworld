@@ -5,7 +5,9 @@
  */
 package zuulworld;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -86,16 +88,20 @@ public class NPC {
     }
     
     public String switchAnswers() { // This method carries out the conversation itself.
-        int key; // key of the hashmap
-        String value; // value of the hashmap
+        int key = -1; // key of the hashmap
+        String response; // value of the hashmap
         
         System.out.print(">");
+        try {
         key = sc.nextInt(); // Next scanner input will set the key value
-        value = answer.get(key); // Gets the string from the hashmap value at the key of "key"
+        } catch (InputMismatchException e){
+            String i = sc.nextLine(); //karrykode... i'm sorry man :(
+        }
+        response = answer.get(key); // Gets the string from the hashmap value at the key of "key"
         chosenAnswer = key; 
         if(!answer.containsKey(key)){ // This if-statement checks if the answer chosen is contained by the hashmap of answers.
-            return "Not a possible answer";
+            return "That's not a possible answer!";
         }
-        return value;
+        return response;
 }
 }

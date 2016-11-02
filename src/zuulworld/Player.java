@@ -7,6 +7,7 @@ package zuulworld;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /**
  *
@@ -21,6 +22,7 @@ public class Player {
     private final int carryCapacity;
     private int carryCurrent;
     private HashMap<String, Items> items;
+    private  String name;
 
     /**
      * Initiates the player with a given health and attack-rating. Also sets the
@@ -37,6 +39,7 @@ public class Player {
         this.carryCapacity = 2;
         this.carryCurrent = 0;
         items = new HashMap<String, Items>();
+        this.name = "";
     }
 
     /**
@@ -177,5 +180,13 @@ public class Player {
     }
     public int getCarryCurrent() {
         return carryCurrent;
+    }
+    public void setName() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Please choose a name: ");
+        this.name = input.nextLine();
+    }
+    public String getName() {
+        return name;
     }
 }
